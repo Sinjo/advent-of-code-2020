@@ -1,6 +1,3 @@
-#[macro_use]
-extern crate clap;
-
 use std::process;
 use libaoc::aoc;
 use clap::{Arg, App};
