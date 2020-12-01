@@ -1,8 +1,14 @@
+use std::collections;
+use std::fs;
 use std::process;
 use libaoc::aoc;
 use clap::{Arg, App};
 
+
 fn main() {
+    let mut solutions = collections::HashMap::new();
+    solutions.insert("1a", aoc::day1a);
+
     let matches = App::new("aoc2020")
         .version("0.1.0")
         .author("Chris Sinjakli <chris@sinjakli.co.uk>")
@@ -45,7 +51,7 @@ fn main() {
         },
     };
 
-    let _puzzle = match matches.value_of("puzzle") {
+    let puzzle = match matches.value_of("puzzle") {
         Some(s) => s,
         None => {
             println!("Key 'puzzle' not found in matches (code broke, fix the code)");
@@ -53,7 +59,7 @@ fn main() {
         }
     };
 
-    let _input_file = match matches.value_of("input-file") {
+    let input_file = match matches.value_of("input-file") {
         Some(s) => s,
         None => {
             println!("Key 'input-file' not found in matches (code broke, fix the code)");
@@ -61,5 +67,18 @@ fn main() {
         }
     };
 
-    println!("AoC module returns: {}", aoc::do_aoc_stuff());
+    let input = match fs::read_to_string(input_file) {
+        Ok(s) => s,
+        Err(e) => {
+            println!("Error reading input file '{}': {}", input_file, e);
+            process::exit(1);
+        }
+    };
+
+    let input_lines: Vec<String> = input.lines().map(str::to_string).collect();
+    let qualified_puzzle = [day_str, puzzle].concat();
+
+    let result = solutions[qualified_puzzle.as_str()](&input_lines);
+
+    println!("Solution to puzzle {} is: {}", qualified_puzzle, result);
 }
