@@ -26,11 +26,20 @@ fn main() {
             .required(true))
         .get_matches();
 
-    let _day: u32 = value_t!(matches, "day", u32).
-        unwrap_or_else( |e| {
-            println!("Invalid day specified: {}", e);
+    let day_str = match matches.value_of("day") {
+        Some(s) => s,
+        None => {
+            println!("Key 'day' not found in matches (code broke, fix the code)");
             process::exit(1);
-        });
+        }
+    };
+    let _better_day: u32 = match day_str.parse() {
+        Ok(i) => i,
+        Err(_) => {
+            println!("Invalid day specified: {}", day_str);
+            process::exit(1);
+        },
+    };
 
     println!("AoC module returns: {}", aoc::do_aoc_stuff());
 }
