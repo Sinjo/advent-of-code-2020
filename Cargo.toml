@@ -10,3 +10,4 @@ edition = "2018"
 name = "libaoc"
 
 [dependencies]
+clap = "~2.33.3"
