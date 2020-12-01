@@ -78,6 +78,7 @@ fn main() {
     let input_lines: Vec<String> = input.lines().map(str::to_string).collect();
     let qualified_puzzle = [day_str, puzzle].concat();
 
+    // TODO: Come back and understand this borrowing
     let result = solutions[qualified_puzzle.as_str()](&input_lines);
 
     println!("Solution to puzzle {} is: {}", qualified_puzzle, result);
