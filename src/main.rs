@@ -1,4 +1,4 @@
-use std::collections;
+use std::collections::HashMap;
 use std::fs;
 use std::process;
 use libaoc::aoc;
@@ -6,8 +6,10 @@ use clap::{Arg, App};
 
 
 fn main() {
-    let mut solutions = collections::HashMap::new();
+    // TODO: Understand this cursed type
+    let mut solutions: HashMap<&str, for<'r> fn(&'r [String]) -> i32> = HashMap::new();
     solutions.insert("1a", aoc::day1a);
+    solutions.insert("1b", aoc::day1b);
 
     let matches = App::new("aoc2020")
         .version("0.1.0")
