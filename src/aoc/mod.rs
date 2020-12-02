@@ -89,11 +89,7 @@ pub fn day2a(inputs: &[String]) -> String {
 
             let occurrences = password.matches(letter).count();
 
-            if occurrences >= lower && occurrences <= upper {
-                return true;
-            } else {
-                return false;
-            }
+            return occurrences >= lower && occurrences <= upper;
         },
         None => false
     }).collect();
