@@ -6,7 +6,7 @@ use clap::{Arg, App};
 
 
 fn main() {
-    let mut solutions: HashMap<&str, fn(&[String]) -> i32> = HashMap::new();
+    let mut solutions: HashMap<&str, fn(&[String]) -> String> = HashMap::new();
     solutions.insert("1a", aoc::day1a);
     solutions.insert("1b", aoc::day1b);
 
