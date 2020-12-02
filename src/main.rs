@@ -10,6 +10,7 @@ fn main() {
     solutions.insert("1a", aoc::day1a);
     solutions.insert("1b", aoc::day1b);
     solutions.insert("2a", aoc::day2a);
+    solutions.insert("2b", aoc::day2b);
 
     let matches = App::new("aoc2020")
         .version("0.1.0")
