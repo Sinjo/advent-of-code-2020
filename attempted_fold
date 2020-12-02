@@ -1,0 +1,13 @@
+            amounts.iter().fold((None, HashSet::new()), |(result, lookup), i| match result {
+                Some(_) => (result, lookup),
+                None => {
+                    let desired = 2020 - i;
+                    if lookup.contains(&desired) {
+                        return (Some(format!("{}", i * desired)), lookup);
+                    } else {
+                        let tmp = HashSet::new();
+                        tmp.insert(i);
+                        return (None, lookup.union(&tmp).collect());
+                    }
+                }
+            }
