@@ -1,4 +1,6 @@
 use std::collections::HashSet;
+use std::convert::TryFrom;
+use std::convert::TryInto;
 use std::iter::FromIterator;
 
 use regex::Regex;
@@ -129,23 +131,23 @@ pub fn day2b(inputs: &[String]) -> anyhow::Result<String> {
 }
 
 pub fn day3a(inputs: &[String]) -> anyhow::Result<String> {
-    let width = inputs[0].chars().count();
-    let height = inputs.into_iter().count();
+    let width: u128 = inputs[0].chars().count().try_into().unwrap();
+    let height: u128 = inputs.into_iter().count().try_into().unwrap();
 
-    let tree_points: Vec<Vec<(usize, usize)>> = inputs.into_iter().enumerate().map(|(j, line)| {
+    let tree_points: Vec<Vec<(u128, u128)>> = inputs.into_iter().enumerate().map(|(j, line)| {
         line.chars().enumerate().map(|(i, c)| {
             if c == '#' {
-                return Some((i,j));
+                return Some((u128::try_from(i).unwrap(),u128::try_from(j).unwrap()));
             } else {
                 return None
             }
         }).filter_map(|p| p ).collect()
     }).collect();
-    let flattened: Vec<(usize, usize)> = tree_points.into_iter().flatten().collect();
+    let flattened: Vec<(u128, u128)> = tree_points.into_iter().flatten().collect();
 
-    let lookup: HashSet<(usize, usize)> = HashSet::from_iter(flattened);
+    let lookup: HashSet<(u128, u128)> = HashSet::from_iter(flattened);
 
-    let mut x = 0;
+    let mut x: u128 = 0;
     let mut trees = 0;
     for y in 0..height {
         if lookup.contains(&(x,y)) {
@@ -159,21 +161,21 @@ pub fn day3a(inputs: &[String]) -> anyhow::Result<String> {
 }
 
 pub fn day3b(inputs: &[String]) -> anyhow::Result<String> {
-    let width = inputs[0].chars().count();
-    let height = inputs.into_iter().count();
+    let width: u128 = inputs[0].chars().count().try_into().unwrap();
+    let height: u128 = inputs.into_iter().count().try_into().unwrap();
 
-    let tree_points: Vec<Vec<(usize, usize)>> = inputs.into_iter().enumerate().map(|(j, line)| {
+    let tree_points: Vec<Vec<(u128, u128)>> = inputs.into_iter().enumerate().map(|(j, line)| {
         line.chars().enumerate().map(|(i, c)| {
             if c == '#' {
-                return Some((i,j));
+                return Some((u128::try_from(i).unwrap(),u128::try_from(j).unwrap()));
             } else {
                 return None
             }
         }).filter_map(|p| p ).collect()
     }).collect();
-    let flattened: Vec<(usize, usize)> = tree_points.into_iter().flatten().collect();
+    let flattened: Vec<(u128, u128)> = tree_points.into_iter().flatten().collect();
 
-    let lookup: HashSet<(usize, usize)> = HashSet::from_iter(flattened);
+    let lookup: HashSet<(u128, u128)> = HashSet::from_iter(flattened);
 
     // (right, down)
     let slopes = vec![
@@ -186,7 +188,7 @@ pub fn day3b(inputs: &[String]) -> anyhow::Result<String> {
 
     let multiplied_trees_per_slope = slopes.into_iter().map(|(right, down)| {
         let mut x = 0;
-        let mut trees = 0;
+        let mut trees: u128 = 0;
         for y in 0..height {
             if y % down != 0 {
                 continue;
@@ -200,7 +202,7 @@ pub fn day3b(inputs: &[String]) -> anyhow::Result<String> {
         }
 
         return trees;
-    }).fold(1, |acc, trees| acc * trees);
+    }).fold(1u128, |acc, trees| acc * trees);
 
     Ok(multiplied_trees_per_slope.to_string())
 }
