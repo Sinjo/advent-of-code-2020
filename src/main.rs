@@ -6,7 +6,7 @@ use clap::{Arg, App};
 
 
 fn main() {
-    let mut solutions: HashMap<&str, fn(&[String]) -> String> = HashMap::new();
+    let mut solutions: HashMap<&str, fn(&[String]) -> anyhow::Result<String>> = HashMap::new();
     solutions.insert("1a", aoc::day1a);
     solutions.insert("1b", aoc::day1b);
     solutions.insert("2a", aoc::day2a);
@@ -83,5 +83,8 @@ fn main() {
 
     let result = solutions[qualified_puzzle.as_str()](&input_lines);
 
-    println!("Solution to puzzle {} is: {}", qualified_puzzle, result);
+    match result {
+        Ok(r) => println!("Solution to puzzle {} is: {}", qualified_puzzle, r),
+        Err(e) => println!("Error running puzzle {}: {}", qualified_puzzle, e)
+    }
 }

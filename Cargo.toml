@@ -10,5 +10,6 @@ edition = "2018"
 name = "libaoc"
 
 [dependencies]
+anyhow = "1.0"
 clap = "~2.33.3"
 regex = "~1.4.2"
