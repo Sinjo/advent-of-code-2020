@@ -1,4 +1,5 @@
 use std::collections::HashSet;
+use std::iter::FromIterator;
 
 use regex::Regex;
 
@@ -125,4 +126,34 @@ pub fn day2b(inputs: &[String]) -> anyhow::Result<String> {
     let valid_count = validity.into_iter().filter(|b| *b).count();
 
     return Ok(valid_count.to_string());
+}
+
+pub fn day3a(inputs: &[String]) -> anyhow::Result<String> {
+    let width = inputs[0].chars().count();
+    let height = inputs.into_iter().count();
+
+    let tree_points: Vec<Vec<(usize, usize)>> = inputs.into_iter().enumerate().map(|(j, line)| {
+        line.chars().enumerate().map(|(i, c)| {
+            if c == '#' {
+                return Some((i,j));
+            } else {
+                return None
+            }
+        }).filter_map(|p| p ).collect()
+    }).collect();
+    let flattened: Vec<(usize, usize)> = tree_points.into_iter().flatten().collect();
+
+    let lookup: HashSet<(usize, usize)> = HashSet::from_iter(flattened);
+
+    let mut x = 0;
+    let mut trees = 0;
+    for y in 0..height {
+        if lookup.contains(&(x,y)) {
+            trees += 1;
+        }
+
+        x = (x +3) % width
+    }
+
+    Ok(trees.to_string())
 }
