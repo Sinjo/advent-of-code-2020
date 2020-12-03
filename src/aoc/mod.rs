@@ -117,9 +117,7 @@ pub fn day2b(inputs: &[String]) -> anyhow::Result<String> {
             let lower_matches = password_chars[lower-1usize] == letter_char;
             let upper_matches = password_chars[upper-1usize] == letter_char;
 
-            let match_count = [lower_matches, upper_matches].iter().filter(|b| **b).count();
-
-            return match_count == 1
+            return lower_matches ^ upper_matches
         },
         None => false
     }).collect();
