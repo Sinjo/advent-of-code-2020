@@ -7,12 +7,12 @@ use clap::{Arg, App};
 
 fn main() {
     let mut solutions: HashMap<&str, fn(&[String]) -> anyhow::Result<String>> = HashMap::new();
-    solutions.insert("1a", aoc::day1a);
-    solutions.insert("1b", aoc::day1b);
-    solutions.insert("2a", aoc::day2a);
-    solutions.insert("2b", aoc::day2b);
-    solutions.insert("3a", aoc::day3a);
-    solutions.insert("3b", aoc::day3b);
+    solutions.insert("1a", aoc::day1::day1a);
+    solutions.insert("1b", aoc::day1::day1b);
+    solutions.insert("2a", aoc::day2::day2a);
+    solutions.insert("2b", aoc::day2::day2b);
+    solutions.insert("3a", aoc::day3::day3a);
+    solutions.insert("3b", aoc::day3::day3b);
 
     let matches = App::new("aoc2020")
         .version("0.1.0")
