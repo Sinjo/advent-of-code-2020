@@ -73,15 +73,6 @@ pub fn validate_record(record: &HashMap<String,String>, ignore_values: bool) -> 
         return false;
     }
 
-    // println!("{}", validate_byr(&record["byr"]));
-    // println!("{}", validate_iyr(&record["iyr"]));
-    // println!("{}", validate_eyr(&record["eyr"]));
-    // println!("{}", validate_hgt(&record["hgt"]));
-    // println!("{}", validate_hcl(&record["hcl"]));
-    // println!("{}", validate_ecl(&record["ecl"]));
-    // println!("{}", validate_pid(&record["pid"]));
-    // println!("=====");
-
     validate_byr(&record["byr"]) &&
         validate_iyr(&record["iyr"]) &&
         validate_eyr(&record["eyr"]) &&
