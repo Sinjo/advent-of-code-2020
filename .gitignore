@@ -13,3 +13,7 @@ Cargo.lock
 #Added by cargo
 
 /target
+
+# As fun as these are for testing the performance of solutions on large inputs,
+# checking hundreds of megs of text into git sounds like a bad time
+inputs/large
