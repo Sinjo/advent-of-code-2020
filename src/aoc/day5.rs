@@ -1,19 +1,8 @@
 pub fn day5a(inputs: &[String]) -> anyhow::Result<String> {
-    let split: Vec<(&str, &str)> = inputs.into_iter().map(|l| l.split_at(7)).collect();
-    let replaced: Vec<(_, _)> = split.into_iter().map(|(row, column)| {
-        let row_binary = row.replace("F", "0").replace("B", "1");
-        let column_binary = column.replace("L", "0").replace("R", "1");
+    let seat_ids: Vec<_> = inputs.into_iter().map(|seat| {
+        let binary = seat.replace("F", "0").replace("B", "1").replace("L", "0").replace("R", "1");
 
-        (row_binary, column_binary)
-    }).collect();
-    let ints: Vec<(_, _)> = replaced.into_iter().map(|(row, column)| {
-        let row_int = usize::from_str_radix(&row, 2).unwrap();
-        let column_int = usize::from_str_radix(&column, 2).unwrap();
-
-        (row_int, column_int)
-    }).collect();
-    let seat_ids: Vec<_> = ints.into_iter().map(|(row, column)| {
-        (row * 8) + column
+        usize::from_str_radix(&binary, 2).unwrap()
     }).collect();
     let max = seat_ids.into_iter().max().unwrap();
 
@@ -21,21 +10,10 @@ pub fn day5a(inputs: &[String]) -> anyhow::Result<String> {
 }
 
 pub fn day5b(inputs: &[String]) -> anyhow::Result<String> {
-    let split: Vec<(&str, &str)> = inputs.into_iter().map(|l| l.split_at(7)).collect();
-    let replaced: Vec<(_, _)> = split.into_iter().map(|(row, column)| {
-        let row_binary = row.replace("F", "0").replace("B", "1");
-        let column_binary = column.replace("L", "0").replace("R", "1");
+    let mut seat_ids: Vec<_> = inputs.into_iter().map(|seat| {
+        let binary = seat.replace("F", "0").replace("B", "1").replace("L", "0").replace("R", "1");
 
-        (row_binary, column_binary)
-    }).collect();
-    let ints: Vec<(_, _)> = replaced.into_iter().map(|(row, column)| {
-        let row_int = usize::from_str_radix(&row, 2).unwrap();
-        let column_int = usize::from_str_radix(&column, 2).unwrap();
-
-        (row_int, column_int)
-    }).collect();
-    let mut seat_ids: Vec<_> = ints.into_iter().map(|(row, column)| {
-        (row * 8) + column
+        usize::from_str_radix(&binary, 2).unwrap()
     }).collect();
     seat_ids.sort();
 
