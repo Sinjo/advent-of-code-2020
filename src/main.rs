@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+use std::time::Instant;
 use std::fs;
 use std::process;
 use libaoc::aoc;
@@ -89,10 +90,16 @@ fn main() {
     let input_lines: Vec<String> = input.lines().map(str::to_string).collect();
     let qualified_puzzle = [day_str, puzzle].concat();
 
+    let start_time = Instant::now();
     let result = solutions[qualified_puzzle.as_str()](&input_lines);
+    let end_time = Instant::now();
+    let duration = end_time.duration_since(start_time);
 
     match result {
-        Ok(r) => println!("Solution to puzzle {} is: {}", qualified_puzzle, r),
+        Ok(r) => {
+            println!("Solution to puzzle {} is: {}", qualified_puzzle, r);
+            println!("Time taken: {:#?}", duration)
+        },
         Err(e) => println!("Error running puzzle {}: {}", qualified_puzzle, e)
     }
 }
