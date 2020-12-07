@@ -16,18 +16,24 @@ pub fn day7a(inputs: &[String]) -> anyhow::Result<String> {
         let unsplit_contents = rule.name("contents").unwrap().as_str();
         let split_contents: Vec<_> = unsplit_contents.split(", ").collect();
 
+        let mut contents = Vec::new();
+
         for s in split_contents.iter() {
-            if s == &"no other bags" {
-                rules.insert(container, None);
-            } else {
+            if !(s == &"no other bags") {
                 let parsed_contents = contents_pattern.captures(s).unwrap();
                 let count: usize = parsed_contents.name("count").unwrap().as_str().parse().unwrap();
                 let colour = parsed_contents.name("colour").unwrap().as_str();
 
-                rules.insert(container, Some((colour, count)));
+                contents.push((colour, count));
             }
 
         };
+
+        rules.insert(container, contents);
+    }
+
+    for colour in rules.keys() {
+
     }
 
     println!("{:#?}", rules);
