@@ -32,11 +32,31 @@ pub fn day7a(inputs: &[String]) -> anyhow::Result<String> {
         rules.insert(container, contents);
     }
 
-    for colour in rules.keys() {
+    let shiny_gold_containers: Vec<_> = rules.keys().filter_map(|container| {
+        if eventually_contains_shiny_gold(&rules, &container) {
+            return Some(container);
+        } else {
+            return None;
+        }
+    }).collect();
+    let container_count = shiny_gold_containers.len();
 
+    Ok(container_count.to_string())
+}
+
+fn eventually_contains_shiny_gold(rules: &HashMap<&str, Vec<(&str, usize)>>, container: &str) -> bool {
+    let possible_contents = &rules[container];
+    
+    for (colour, _) in possible_contents.iter() {
+        if colour == &"shiny gold" {
+            return true;
+        } else {
+            let eventually_contained = eventually_contains_shiny_gold(rules, colour);
+            if eventually_contained {
+                return eventually_contained;
+            }
+        }
     }
 
-    println!("{:#?}", rules);
-
-    Ok("whatever".to_string())
+    false
 }
