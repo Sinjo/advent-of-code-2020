@@ -11,6 +11,7 @@ pub fn day9a(inputs: &[String]) -> anyhow::Result<String> {
     Ok(answer.to_string())
 }
 
+// TODO: Implement the caterpillar
 pub fn day9b(inputs: &[String]) -> anyhow::Result<String> {
     let numbers: Vec<usize> = inputs.iter().map(|i| i.parse().unwrap()).collect();
     let target = find_non_sum_of_previous(&numbers, 25);
