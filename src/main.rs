@@ -27,6 +27,7 @@ fn main() {
     solutions.insert("9a", aoc::day9::day9a);
     solutions.insert("9b", aoc::day9::day9b);
     solutions.insert("10a", aoc::day10::day10a);
+    solutions.insert("10b", aoc::day10::day10b);
 
     let matches = App::new("aoc2020")
         .version("0.1.0")
