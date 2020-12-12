@@ -31,6 +31,7 @@ fn main() {
     solutions.insert("11a", aoc::day11::day11a);
     solutions.insert("11b", aoc::day11::day11b);
     solutions.insert("12a", aoc::day12::day12a);
+    solutions.insert("12b", aoc::day12::day12b);
 
     let matches = App::new("aoc2020")
         .version("0.1.0")
