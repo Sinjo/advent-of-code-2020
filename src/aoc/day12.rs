@@ -22,7 +22,7 @@ pub fn day12a(inputs: &[String]) -> anyhow::Result<String> {
     let mut south = 0;
     let mut east = 0;
     let mut west = 0;
-    let mut direction = 0;
+    let mut bearing = 0;
 
     for instruction in instructions.iter() {
         match instruction.direction {
@@ -39,13 +39,13 @@ pub fn day12a(inputs: &[String]) -> anyhow::Result<String> {
                 west += instruction.amount;
             },
             Direction::Left => {
-                direction = modulo(direction - instruction.amount, 360);
+                bearing = modulo(bearing - instruction.amount, 360);
             },
             Direction::Right => {
-                direction = modulo(direction + instruction.amount, 360);
+                bearing = modulo(bearing + instruction.amount, 360);
             },
             Direction::Forward => {
-                match direction {
+                match bearing {
                     0 => {
                         east += instruction.amount;
                     },
