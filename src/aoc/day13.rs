@@ -1,3 +1,5 @@
+use num::BigInt;
+
 pub fn day13a(inputs: &[String]) -> anyhow::Result<String> {
     let earliest_departure: usize = inputs[0].parse().unwrap();
     let buses: Vec<usize> = inputs[1].split(",").filter_map(|bus| {
@@ -24,7 +26,7 @@ pub fn day13a(inputs: &[String]) -> anyhow::Result<String> {
 // 
 //   (timestamp + offset) % bus_id = 0
 //
-//   (0,7), (1, 13)                     //, (2, 17)
+//   (0,7), (1, 13)
 //
 //   77 is smallest timestamp
 //   77 % 7 = 0
@@ -36,68 +38,61 @@ pub fn day13a(inputs: &[String]) -> anyhow::Result<String> {
 //
 //   timestamp % first_in_part = second_in_pair 
 pub fn day13b(inputs: &[String]) -> anyhow::Result<String> {
-    let buses: Vec<(i128, i128)> = inputs[1].split(",").enumerate().filter_map(|(index,bus)| {
+    let buses: Vec<(BigInt, BigInt)> = inputs[1].split(",").enumerate().filter_map(|(index,bus)| {
         match bus {
             "x" => None,
             id => {
-                let parsed: i128 = id.parse().unwrap();
-                // Some((parsed, modulo(parsed - index as i128, parsed)))
-                Some((parsed, -(index as i128)))
+                let parsed: BigInt = id.parse().unwrap();
+                // This and the non-commented line below are equivalent because the calculations we
+                // do later are all modulo some number. That means we can either start with the
+                // offset of the bus modulo the frequency (e.g. 13 - 1 % 13 = 12) or the offset itself
+                // (-1).
+                //
+                // Some((parsed.clone(), modulo(&(parsed.clone() - BigInt::from(index)), &parsed.clone())))
+                Some((parsed, -(BigInt::from(index))))
             }
         }
     }).collect();
-    // buses.sort_by(|(id_a, _), (id_b, _)| id_b.cmp(id_a));
-
-    // let test = extended_euclidian(7, 13);
-    // println!("{:#?}", test);
-
-    // let test2 = chinese_remainder_theorem((7, 0), (13, -1));
-    // println!("{:#?}", test2);
-
-    // println!("{:#?}", buses);
     
-    let head = buses[0];
-    let (_, tail) = buses.split_at(1);
+    let head = buses[0].clone();
+    let (_, tail) = &buses.split_at(1);
 
-    let (final_mod, final_product) = tail.iter().fold(head, |acc, next| {
-        chinese_remainder_theorem(acc, *next)
+    let (final_mod, final_product) = tail.iter().cloned().fold(head, |acc, next| {
+        chinese_remainder_theorem(acc, next)
     });
 
-    let answer = modulo(final_product, final_mod);
+    let answer = modulo(&final_product, &final_mod);
 
-    println!("{} {}", final_mod, final_product);
-    println!("{}", answer);
-
-    Ok("whatever".to_string())
+    Ok(answer.to_string())
 }
 
-fn chinese_remainder_theorem(input1: (i128, i128), input2: (i128, i128)) -> (i128, i128) {
+fn chinese_remainder_theorem(input1: (BigInt, BigInt), input2: (BigInt, BigInt)) -> (BigInt, BigInt) {
     let (mod1, remainder1) = input1;
     let (mod2, remainder2) = input2;
-    let (_, x, y) = extended_euclidian(mod1, mod2);
-    let new_remainder = remainder1 * y * mod2 + remainder2 * x * mod1;
+    let (_, x, y) = extended_euclidian(mod1.clone(), mod2.clone());
+    let new_remainder = remainder1 * y * mod2.clone() + remainder2 * x * mod1.clone();
 
     (mod1 * mod2, new_remainder)
 }
 
-fn extended_euclidian(a: i128, b: i128) -> (i128, i128, i128) {
+fn extended_euclidian(a: BigInt, b: BigInt) -> (BigInt, BigInt, BigInt) {
     let mut remainder = a;
-    let mut x = 1;
-    let mut y = 0;
+    let mut x = BigInt::from(1);
+    let mut y = BigInt::from(0);
     let mut remainder_next = b;
-    let mut x_next = 0;
-    let mut y_next = 1;
+    let mut x_next = BigInt::from(0);
+    let mut y_next = BigInt::from(1);
 
     loop {
-        if remainder_next == 0 {
-            return (remainder, x, y);
+        if remainder_next == BigInt::from(0) {
+            return (remainder.clone(), x, y);
         }
 
         // calculate new values
-        let quotient = remainder / remainder_next;
-        let remainder_new = remainder - quotient * remainder_next;
-        let x_new = x - quotient * x_next;
-        let y_new = y - quotient * y_next;
+        let quotient = remainder.clone() / remainder_next.clone();
+        let remainder_new = remainder - quotient.clone() * remainder_next.clone();
+        let x_new = x - quotient.clone() * x_next.clone();
+        let y_new = y - quotient.clone() * y_next.clone();
 
         // shift values along
         remainder = remainder_next;
@@ -109,6 +104,6 @@ fn extended_euclidian(a: i128, b: i128) -> (i128, i128, i128) {
     }
 }
 
-fn modulo(a: i128, b: i128) -> i128 {
+fn modulo(a: &BigInt, b: &BigInt) -> BigInt {
     ((a % b) + b) % b
 }
