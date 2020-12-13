@@ -70,7 +70,7 @@ fn chinese_remainder_theorem(input1: (BigInt, BigInt), input2: (BigInt, BigInt))
     let (mod1, remainder1) = input1;
     let (mod2, remainder2) = input2;
     let (_, x, y) = extended_euclidian(mod1.clone(), mod2.clone());
-    let new_remainder = remainder1 * y * mod2.clone() + remainder2 * x * mod1.clone();
+    let new_remainder = remainder1 * y * &mod2 + remainder2 * x * &mod1;
 
     (mod1 * mod2, new_remainder)
 }
@@ -85,14 +85,14 @@ fn extended_euclidian(a: BigInt, b: BigInt) -> (BigInt, BigInt, BigInt) {
 
     loop {
         if remainder_next == BigInt::from(0) {
-            return (remainder.clone(), x, y);
+            return (remainder, x, y);
         }
 
         // calculate new values
-        let quotient = remainder.clone() / remainder_next.clone();
-        let remainder_new = remainder - quotient.clone() * remainder_next.clone();
-        let x_new = x - quotient.clone() * x_next.clone();
-        let y_new = y - quotient.clone() * y_next.clone();
+        let quotient = &remainder / &remainder_next;
+        let remainder_new = remainder - &quotient * &remainder_next;
+        let x_new = x - &quotient * &x_next;
+        let y_new = y - &quotient * &y_next;
 
         // shift values along
         remainder = remainder_next;
