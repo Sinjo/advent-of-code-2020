@@ -30,6 +30,8 @@ pub fn day15a(inputs: &[String]) -> anyhow::Result<String> {
         // if it's not there, next number is 0
         // if it is there, next number is (current turn - 1 - turn from map)
 
+        // we update the hash this late as we need the old turn to still be
+        // there for the calculation above to work
         number_last_played.insert(last_number_spoken, turn - 1);
         last_number_spoken = next_number;
         turn += 1;
@@ -65,6 +67,8 @@ pub fn day15b(inputs: &[String]) -> anyhow::Result<String> {
         // if it's not there, next number is 0
         // if it is there, next number is (current turn - 1 - turn from map)
 
+        // we update the hash this late as we need the old turn to still be
+        // there for the calculation above to work
         number_last_played.insert(last_number_spoken, turn - 1);
         last_number_spoken = next_number;
         turn += 1;
