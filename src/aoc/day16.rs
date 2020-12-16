@@ -9,19 +9,19 @@ pub fn day16a(inputs: &[String]) -> anyhow::Result<String> {
 
     let rule_tuples: Vec<_> = rules.iter().flat_map(|r| {
         let captures = rule_pattern.captures(r).unwrap();
-        let lower1: u128 = captures.name("lower1").unwrap().as_str().parse().unwrap();
-        let upper1: u128 = captures.name("upper1").unwrap().as_str().parse().unwrap();
-        let lower2: u128 = captures.name("lower2").unwrap().as_str().parse().unwrap();
-        let upper2: u128 = captures.name("upper2").unwrap().as_str().parse().unwrap();
+        let lower1: usize = captures.name("lower1").unwrap().as_str().parse().unwrap();
+        let upper1: usize = captures.name("upper1").unwrap().as_str().parse().unwrap();
+        let lower2: usize = captures.name("lower2").unwrap().as_str().parse().unwrap();
+        let upper2: usize = captures.name("upper2").unwrap().as_str().parse().unwrap();
 
         vec![(lower1, upper1), (lower2, upper2)]
     }).collect();
 
     let parsed_tickets: Vec<_> = tickets.iter().map(|t| {
-        t.split(",").map(|s| s.parse::<u128>().unwrap()).collect::<Vec<_>>()
+        t.split(",").map(|s| s.parse::<usize>().unwrap()).collect::<Vec<_>>()
     }).collect();
 
-    let invalid_values: Vec<u128> = parsed_tickets.iter().flat_map(|t| {
+    let invalid_values: Vec<usize> = parsed_tickets.iter().flat_map(|t| {
         t.iter().cloned().filter(|i| {
             !rule_tuples.iter().any(|(lower, upper)| {
                 i >= &lower && i <= &upper
@@ -29,7 +29,7 @@ pub fn day16a(inputs: &[String]) -> anyhow::Result<String> {
         }).collect::<Vec<_>>()
     }).collect();
 
-    let answer: u128 = invalid_values.iter().sum();
+    let answer: usize = invalid_values.iter().sum();
 
     Ok(answer.to_string())
 }
@@ -39,23 +39,23 @@ pub fn day16b(inputs: &[String]) -> anyhow::Result<String> {
 
     let parts: Vec<_> = inputs.split(|s| s.is_empty()).collect();
     let rules: Vec<_> = parts[0].to_vec();
-    let our_ticket: Vec<_> = parts[1][1].split(",").map(|s| s.parse::<u128>().unwrap()).collect();
+    let our_ticket: Vec<_> = parts[1][1].split(",").map(|s| s.parse::<usize>().unwrap()).collect();
     let tickets = parts[2][1..parts[2].len()].to_vec();
 
     // need pairs of rule : name of rule
     let rule_tuples: Vec<_> = rules.iter().flat_map(|r| {
         let captures = rule_pattern.captures(r).unwrap();
         let rule_name = captures.name("rule_name").unwrap().as_str();
-        let lower1: u128 = captures.name("lower1").unwrap().as_str().parse().unwrap();
-        let upper1: u128 = captures.name("upper1").unwrap().as_str().parse().unwrap();
-        let lower2: u128 = captures.name("lower2").unwrap().as_str().parse().unwrap();
-        let upper2: u128 = captures.name("upper2").unwrap().as_str().parse().unwrap();
+        let lower1: usize = captures.name("lower1").unwrap().as_str().parse().unwrap();
+        let upper1: usize = captures.name("upper1").unwrap().as_str().parse().unwrap();
+        let lower2: usize = captures.name("lower2").unwrap().as_str().parse().unwrap();
+        let upper2: usize = captures.name("upper2").unwrap().as_str().parse().unwrap();
 
         vec![(rule_name, lower1, upper1, lower2, upper2)]
     }).collect();
 
     let parsed_tickets: Vec<_> = tickets.iter().map(|t| {
-        t.split(",").map(|s| s.parse::<u128>().unwrap()).collect::<Vec<_>>()
+        t.split(",").map(|s| s.parse::<usize>().unwrap()).collect::<Vec<_>>()
     }).collect();
 
     let valid_tickets: Vec<Vec<_>> = parsed_tickets.iter().cloned().filter(|t| {
@@ -103,14 +103,14 @@ pub fn day16b(inputs: &[String]) -> anyhow::Result<String> {
         r.starts_with(&"departure".to_string())
     }).collect();
 
-    let answer: u128 = departure_columns.iter().fold(1, |acc, (index, _)| {
+    let answer: usize = departure_columns.iter().fold(1, |acc, (index, _)| {
         acc * our_ticket[***index]
     });
 
     Ok(answer.to_string())
 }
 
-fn matches_rule(value: &u128, rule: &(&str, u128, u128, u128, u128)) -> bool {
+fn matches_rule(value: &usize, rule: &(&str, usize, usize, usize, usize)) -> bool {
     let (_, lower1, upper1, lower2, upper2) = rule;
 
     (value >= lower1 && value <= upper1) ||
