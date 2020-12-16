@@ -60,9 +60,8 @@ pub fn day16b(inputs: &[String]) -> anyhow::Result<String> {
 
     let valid_tickets: Vec<Vec<_>> = parsed_tickets.iter().cloned().filter(|t| {
         !t.iter().cloned().any(|i| {
-            !rule_tuples.iter().cloned().any(|(_, lower1, upper1, lower2, upper2)| {
-                (i >= lower1 && i <= upper1) ||
-                    (i >= lower2 && i <= upper2)
+            !rule_tuples.iter().cloned().any(|rule| {
+                matches_rule(&i, &rule)
             })
         })
     }).collect();
